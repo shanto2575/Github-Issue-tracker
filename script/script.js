@@ -7,6 +7,7 @@ const TotalCounts = document.getElementById('TotalCount')
 //card
 const cardContainer = document.getElementById('card-container');
 const cardModal = document.getElementById('cardModal')
+let allData = [];
 
 //modal
 const title = document.getElementById('title')
@@ -83,6 +84,7 @@ const priorityColors = {
 };
 
 
+
 //card section
 async function CardSection() {
     showloading()
@@ -99,14 +101,14 @@ function displayCard(data) {
 
     data.forEach((card) => {
 
-        const isClosedLow = (card.status.toLowerCase() === "closed" || card.status.toLowerCase() === "open") && card.priority === "low";
+        const isClosedLow = (card.status.toLowerCase() === "open");
         const statusIcon = isClosedLow
-            ? "./assets/Closed-Status.png"
-            : "./assets/Open-Status.png";
+            ? "./assets/Open-Status.png"
+            : "./assets/Closed-Status.png";
 
         const borderColor = isClosedLow
-            ? "border-t-4 border-t-purple-500"
-            : "border-t-4 border-t-green-500";
+            ? "border-t-4 border-t-green-500"
+            : "border-t-4 border-t-purple-500";
 
         const badgeColor = priorityColors[card.priority] ? priorityColors[card.priority].bg : "bg-gray-200 text-gray-600";
 
@@ -155,7 +157,7 @@ async function openModal(cardId) {
     assignee.textContent = `${detailsData.assignee ? detailsData.assignee : 'shanto sharma'}`;
     status.textContent = detailsData.status;
     priority.textContent = detailsData.priority;
-    updatedAt.textContent = detailsData.updatedAt;
+    updatedAt.textContent = `${new Date(detailsData.createdAt).toLocaleDateString()}`;
     openBy.textContent = `${detailsData.assignee ? detailsData.assignee : 'shanto sharma'}`
 
     cardModal.showModal()
@@ -168,19 +170,19 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
     const inputValue = input.value.trim().toLowerCase();
     console.log("Search Text:", inputValue);
 
-    if (!inputValue) return alert('Place input a value'); 
+    if (!inputValue) return alert('Place input a value');
 
 
-        const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`);
-        const data = await res.json();
-        console.log("Search Result:", data);
+    const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`);
+    const data = await res.json();
+    console.log("Search Result:", data);
 
-        if (data.data && data.data.length > 0) {
-            displayCard(data.data); 
-        } else {
-            cardContainer.innerHTML = `<p class="text-center text-red-500 py-10 text-3xl ">No results found for "${inputValue}"</p>`;
-        }
+    if (data.data && data.data.length > 0) {
+        displayCard(data.data);
+    } else {
+        cardContainer.innerHTML = `<p class="text-center text-red-500 py-10 text-3xl ">No results found for "${inputValue}"</p>`;
     }
-    
+}
+
 );
 
