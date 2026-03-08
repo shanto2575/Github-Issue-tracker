@@ -28,9 +28,6 @@ function calculation() {
 
 
 // Toggle Button
-window.onload = function () {
-    toggle('allbtn')
-}
 function toggle(id) {
     allBtn.classList.remove('btn-primary')
     openBtn.classList.remove('btn-primary')
@@ -42,21 +39,17 @@ function toggle(id) {
     let filterData = allData;
     console.log(filterData)
     if (id === 'openbtn') {
-        showloading()
         filterData = allData.filter(card =>
-            card.status.toLowerCase() === 'open'
+        card.status.toLowerCase() === 'open'
         );
     }
-
     if (id === 'closedbtn') {
         showloading()
         filterData = allData.filter(card =>
-            card.status.toLowerCase() === 'closed'
+        card.status.toLowerCase() === 'closed'
         );
     }
-
     displayCard(filterData);
-    hiddenloading()
 }
 
 //loading spiner
@@ -103,7 +96,6 @@ const priorityColors = {
 };
 
 
-
 //card section
 async function CardSection() {
     showloading()
@@ -138,7 +130,7 @@ function displayCard(data) {
 
         div.innerHTML = `
             <div class="flex justify-between">
-                <img src="${statusIcon}" alt="${card.status}">
+                <img src="${statusIcon}" class="w-8 object-cover" alt="${card.status}">
                 <p class="font-bold rounded-2xl px-5 py-1 uppercase ${badgeColor}">
                     ${card.priority}
                 </p>
@@ -171,6 +163,7 @@ async function openModal(cardId) {
     const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${cardId}`)
     const data = await res.json()
     const detailsData = data.data
+    console.log(detailsData)
 
     title.textContent = detailsData.title;
     description.textContent = detailsData.description;
@@ -191,7 +184,6 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
 
     if (!inputValue) return alert('Place input a value');
 
-
     const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`);
     const data = await res.json();
     const alldata = data.data
@@ -210,5 +202,3 @@ document.getElementById('inputBtn').addEventListener('keypress', function (e) {
             document.getElementById('searchBtn').click()
         }
     })
-
-
