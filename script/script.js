@@ -181,6 +181,26 @@ async function openModal(cardId) {
     cardModal.showModal()
 }
 
+//search
+document.getElementById('searchBtn').addEventListener('click', async () => {
+    const input = document.getElementById('inputBtn');
+    const inputValue = input.value.trim().toLowerCase();
+    console.log("Search Text:", inputValue);
 
+    if (!inputValue) return alert('Place input a value');
+
+
+    const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`);
+    const data = await res.json();
+    const alldata=data.data
+    console.log("Search Result:", data);
+
+    if (alldata && alldata.length > 0) {
+        displayCard(alldata);
+    } else {
+        cardContainer.innerHTML = `<p class="text-center text-red-500 py-10 text-3xl ">No results found for "${inputValue}"</p>`;
+    }
+}
+);
 
 
