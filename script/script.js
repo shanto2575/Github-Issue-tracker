@@ -38,6 +38,23 @@ function toggle(id) {
 
     const selected = document.getElementById(id)
     selected.classList.add('btn-primary')
+    
+    let filterData=allData;
+    console.log(filterData)
+if (id === 'openbtn') {
+        filterData = allData.filter(card => 
+            card.status.toLowerCase() === 'open'
+        );
+    }
+
+    if (id === 'closedbtn') {
+        filterData = allData.filter(card => 
+            card.status.toLowerCase() === 'closed'
+        );
+    }
+
+    displayCard(filterData);
+
 }
 
 //loading spiner
@@ -58,7 +75,7 @@ const labelColors = {
 const labelElement = (arr) => {
     return arr.map(label => {
         const color = labelColors[label] || "bg-purple-100 text-purple-600";
-
+    
         return `
         <span class="badge ${color} uppercase text-sm px-3 py-1">
             ${label}
@@ -90,7 +107,8 @@ async function CardSection() {
     showloading()
     const res = await fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues');
     const data = await res.json();
-    displayCard(data.data)
+    allData=data.data
+    displayCard(allData)
 }
 CardSection()
 
@@ -164,7 +182,6 @@ async function openModal(cardId) {
 }
 
 //search
-
 document.getElementById('searchBtn').addEventListener('click', async () => {
     const input = document.getElementById('inputBtn');
     const inputValue = input.value.trim().toLowerCase();
@@ -185,4 +202,5 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
 }
 
 );
+
 
