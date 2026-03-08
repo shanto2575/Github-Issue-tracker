@@ -38,23 +38,25 @@ function toggle(id) {
 
     const selected = document.getElementById(id)
     selected.classList.add('btn-primary')
-    
-    let filterData=allData;
+
+    let filterData = allData;
     console.log(filterData)
-if (id === 'openbtn') {
-        filterData = allData.filter(card => 
+    if (id === 'openbtn') {
+        showloading()
+        filterData = allData.filter(card =>
             card.status.toLowerCase() === 'open'
         );
     }
 
     if (id === 'closedbtn') {
-        filterData = allData.filter(card => 
+        showloading()
+        filterData = allData.filter(card =>
             card.status.toLowerCase() === 'closed'
         );
     }
 
     displayCard(filterData);
-
+    hiddenloading()
 }
 
 //loading spiner
@@ -75,7 +77,7 @@ const labelColors = {
 const labelElement = (arr) => {
     return arr.map(label => {
         const color = labelColors[label] || "bg-purple-100 text-purple-600";
-    
+
         return `
         <span class="badge ${color} uppercase text-sm px-3 py-1">
             ${label}
@@ -107,7 +109,7 @@ async function CardSection() {
     showloading()
     const res = await fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues');
     const data = await res.json();
-    allData=data.data
+    allData = data.data
     displayCard(allData)
 }
 CardSection()
@@ -192,7 +194,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
 
     const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`);
     const data = await res.json();
-    const alldata=data.data
+    const alldata = data.data
     console.log("Search Result:", data);
 
     if (alldata && alldata.length > 0) {
@@ -202,5 +204,11 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
     }
 }
 );
+//Enter press to search
+document.getElementById('inputBtn').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('searchBtn').click()
+        }
+    })
 
 
