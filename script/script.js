@@ -36,6 +36,7 @@ function toggle(id) {
     const selected = document.getElementById(id)
     selected.classList.add('btn-primary')
 
+    showloading()
     let filterData = allData;
     console.log(filterData)
     if (id === 'openbtn') {
@@ -108,7 +109,7 @@ CardSection()
 
 //card display
 function displayCard(data) {
-
+    showloading()
     cardContainer.innerHTML = "";
 
     data.forEach((card) => {
@@ -184,6 +185,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
 
     if (!inputValue) return alert('Place input a value');
 
+    showloading()
     const res = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`);
     const data = await res.json();
     const alldata = data.data
@@ -194,6 +196,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
     } else {
         cardContainer.innerHTML = `<p class="text-center text-red-500 py-10 text-3xl ">No results found for "${inputValue}"</p>`;
     }
+    hiddenloading()
 }
 );
 //Enter press to search
